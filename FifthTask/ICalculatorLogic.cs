@@ -9,8 +9,8 @@ namespace FifthTask
     interface ICalculatorLogic
     {
         bool NotOperator(int j);
-        double GetLeftOperand(int i);
-        double GetRightOperand(int i);
+        int GetLeftOperand(int i);
+        int GetRightOperand(int i);
         void ReplaceExp(int i, double toThis);
         void ReplaceMultiDivision(int i);
         void ReplaceSumSubstraction(int i);

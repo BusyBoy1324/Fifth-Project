@@ -18,11 +18,17 @@ namespace FifthTask
             return InBrackets[j] != '+' && InBrackets[j] != '-' && InBrackets[j] != '*' && InBrackets[j] != '/';
         }
 
-        public double GetLeftOperand(int i)
+        public int GetLeftOperand(int i)
         {
             string LeftOperand = "";
+            bool negative = false;
             for (int j = i - 1; j >= 0; j--)
             {
+                if (InBrackets[j] == '#')
+                {
+                    negative = true;
+                    break;
+                }
                 if (NotOperator(j))
                 {
                     LeftOperand = InBrackets[j] + LeftOperand;
@@ -32,17 +38,25 @@ namespace FifthTask
                     break;
                 }
             }
-            var englishCulture = CultureInfo.GetCultureInfo("en-US");
-            double.TryParse(LeftOperand, style, englishCulture, out double result);
+            int.TryParse(LeftOperand, out int result);
+            if (negative)
+            {
+                return 0 - result;
+            }
             return result;
         }
 
-        public double GetRightOperand(int i)
+        public int GetRightOperand(int i)
         {
             string RightOperand = "";
+            bool negative = false;
             for (int j = i + 1; j < InBrackets.Length; j++)
             {
-                if (NotOperator(j))
+                if (InBrackets[j] == '#')
+                {
+                    negative = true;
+                }
+                else if (NotOperator(j))
                 {
                     RightOperand += InBrackets[j];
                 }
@@ -51,8 +65,11 @@ namespace FifthTask
                     break;
                 }
             }
-            var englishCulture = CultureInfo.GetCultureInfo("en-US");
-            double.TryParse(RightOperand, style, englishCulture, out double result);
+            int.TryParse(RightOperand, out int result);
+            if (negative)
+            {
+                return 0 - result;
+            }
             return result;
         }
 
@@ -82,7 +99,7 @@ namespace FifthTask
                     break;
                 }
             }
-            InBrackets = InBrackets.Replace(InBrackets.Substring(FromI, ToI - FromI + 1), ToThis.ToString());
+            InBrackets = InBrackets.Substring(0, FromI) + ToThis.ToString().Replace('-', '#') + InBrackets.Substring(FromI + ToI - FromI + 1);
         }
 
         public void ReplaceMultiDivision(int i)
@@ -172,7 +189,7 @@ namespace FifthTask
             for (int i = 0; i < strings.Count; i++)
             {
                 if (!strings[i].Any(letter => Char.IsLetter(letter)))
-                { 
+                {
                     exp = '(' + strings[i].Replace(" ", "") + ')';
                     int o;
                     while (FindBrackets(out o))
@@ -180,11 +197,12 @@ namespace FifthTask
                         CaltulateBrackets();
                         exp = exp.Insert(o, InBrackets);
                     }
+                    exp = exp.Replace('#', '-');
                     if (!divideByZero)
                     {
                         result.Add($"{strings[i]}: {exp}");
                     }
-                    else 
+                    else
                     {
                         result.Add($"{strings[i]}: Divide by Zero");
                         divideByZero = false;
