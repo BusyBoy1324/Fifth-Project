@@ -26,7 +26,15 @@ namespace FifthTask
         }
         public void WriteResultToTheFile(List <string> strings, string path)
         {
-            File.WriteAllLines(path, strings);
+            string projectDir = Path.GetDirectoryName(path);
+            Directory.SetCurrentDirectory(projectDir);
+            FileStream fs = new FileStream("result.txt", FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+            StreamWriter sw = new StreamWriter(fs, Encoding.UTF8);
+            for (int i = 0; i < strings.Count; i++)
+            {
+                sw.WriteLine(strings[i]);
+                sw.Flush();
+            }
         }
         public void AskForResultFilePath()
         {

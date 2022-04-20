@@ -19,7 +19,7 @@ namespace FifthTask
         }
         public void Calculate()
         {
-            string startChoise = String.Empty, path = String.Empty, resultFilePath = String.Empty, expression = String.Empty;
+            string startChoise = String.Empty, path = String.Empty, expression = String.Empty;
             List<string> strings = new List<string>();
             List<string> result = new List<string>();
             bool check = true;
@@ -47,14 +47,14 @@ namespace FifthTask
                     }
                     strings = _reader.ReadFileString(path);
                     result = _logic.Calculation(strings);
-                    _writer.AskForResultFilePath();
-                    resultFilePath = _reader.ReadResultFilePath();
-                    while (!File.Exists(resultFilePath))
-                    {
-                        _writer.WriteFileNotFounded();
-                        resultFilePath = _reader.ReadResultFilePath();
-                    }
-                    _writer.WriteResultToTheFile(result, resultFilePath);
+                    //_writer.AskForResultFilePath();
+                    //resultFilePath = _reader.ReadResultFilePath();
+                    //while (!File.Exists(resultFilePath))
+                    //{
+                    //    _writer.WriteFileNotFounded();
+                    //    resultFilePath = _reader.ReadResultFilePath();
+                    //}
+                    _writer.WriteResultToTheFile(result, path);
                     check = false;
                 }
             }
